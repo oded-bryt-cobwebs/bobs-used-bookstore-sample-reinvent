@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
 using System.Threading.Tasks;
 
 namespace Bookstore.Web.Startup
@@ -56,7 +57,7 @@ namespace Bookstore.Web.Startup
                 {
                     await context.OrderItem.FirstOrDefaultAsync();
                 }
-                catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Message.Contains("RowVersion"))
+                catch (NpgsqlException ex) when (ex.Message.Contains("RowVersion"))
                 {
                     await context.Database.EnsureDeletedAsync();
                     await context.Database.EnsureCreatedAsync();
